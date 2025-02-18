@@ -33,7 +33,21 @@ class CheeseDataset(Dataset):
         return len(self.paths)
 
 
+class CheeseGenerator(pl.LightningModule):
+    def __init__(self):
+        pass
+
+
+class CheeseDiscriminator(pl.LightningModule):
+    def __init__(self):
+        pass
+
+
+class CheeseGAN(pl.LightningModule):
+    def __init__(self):
+        pass
 
 
 # Download data
 data = od.download("https://www.kaggle.com/datasets/mathurinache/fromages-images")
+cheese = CheeseDataset()
