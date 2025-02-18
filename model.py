@@ -10,27 +10,22 @@ from PIL import Image
 
 class CheeseDataset(Dataset):
     def __init__(self, path="fromages-images"):
-        # Load cheeses paths into self.paths
-        dirs = [os.path.join(path, i) for i in os.listdir(path)]
-        self.paths = []
-        for i in dirs:
-            cheeses = os.listdir(i)
-            for c in cheeses:
-                path = os.path.join(i, c)
-                self.paths.append(path)
         # define transforms
         self.transform = torchvision.transforms.Compose([
-            torchvision.transforms.ToTensor()
+            torchvision.transforms.ToTensor(),
             ])
+        # Load cheeses paths into self.paths
+        self.folder = torchvision.datasets.ImageFolder(path, transform=self.transform)
 
     def __getitem__(self, idx):
-        path = self.paths[idx]
-        image = Image.open(path)
-        tensor = self.transform(image)
-        return tensor
+        try:
+            return self.folder[idx]
+        except:
+            first = self.folder[0]
+            return torch.rand(first[0].shape)
 
     def __len__(self):
-        return len(self.paths)
+        return len(self.folder)
 
 
 class CheeseGenerator(pl.LightningModule):
@@ -50,4 +45,3 @@ class CheeseGAN(pl.LightningModule):
 
 # Download data
 data = od.download("https://www.kaggle.com/datasets/mathurinache/fromages-images")
-cheese = CheeseDataset()
